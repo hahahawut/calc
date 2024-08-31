@@ -103,8 +103,3 @@ mvn test
 
 These design decisions aim to create a flexible, maintainable, and extensible calculator that can be easily adapted to various use cases and expanded with new functionality as needed.
 
-## Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-[Specify your license here]
