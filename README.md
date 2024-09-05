@@ -50,7 +50,7 @@ src/
 1. Ensure you have Java 19 and Maven installed on your system.
 2. Clone this repository:
    ```
-   git clone [repository-url]
+   git clone git@github.com:nergui/calc.git
    ```
 3. Navigate to the project directory:
    ```
