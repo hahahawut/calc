@@ -4,7 +4,7 @@
 This project implements a flexible, extensible calculator in Java. It supports basic arithmetic operations and allows for easy addition of new operations. The calculator is designed with object-oriented principles in mind, particularly adhering to the Open-Closed Principle.
 
 ## Features
-- Basic arithmetic operations (ADD, SUBTRACT, MULTIPLY, DIVIDE)
+- Basic arithmetic operations [ADD, SUBTRACT, MULTIPLY, DIVIDE]
 - Extensible design allowing easy addition of new operations
 - Chaining of multiple operations
 - Error handling for invalid operations and division by zero
