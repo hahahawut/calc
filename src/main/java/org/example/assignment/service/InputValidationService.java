@@ -15,64 +15,64 @@ public class InputValidationService {
 
 	// Validates a single calculate request
 	public void validateCalculateRequest(CalculateRequest calculateRequest) {
-		MathOperation mathOperation = validateAndParseOperation(calculateRequest.getOp());
-		Number num1 = calculateRequest.getNum1();
-		Number num2 = calculateRequest.getNum2();
-
-		validateOperation(mathOperation);
-		validateNumbers(num1, num2);
+		validateOperation(calculateRequest.getOp());
+		validateNumbers(calculateRequest.getNum1(), calculateRequest.getNum2());
 	}
 
 	// Validates a chain of operations request
 	public void validateChainRequest(ChainRequest chainRequest) {
-		List<OperationRequest> operations = chainRequest.getOperations();
-		validateOperationsList(operations);
+		if (chainRequest == null) {
+			logAndThrowError("Chain request cannot be null.");
+		}
+		validateOperationsList(chainRequest.getOperations());
 	}
 
-	// Ensures the operation is not null and is supported
-	public void validateOperation(MathOperation mathOperation) {
+	// Validates the operation from the request
+	public void validateOperation(String operationStr) {
+		MathOperation mathOperation = parseOperation(operationStr);
 		if (mathOperation == null) {
-			logAndThrowError("operation cannot be null or not supported");
+			logAndThrowError("Unsupported operation: " + operationStr);
 		}
 	}
 
 	// Validates two numbers, ensuring none are null and divisor is not zero
 	public void validateNumbers(Number num1, Number num2) {
 		if (num1 == null || num2 == null) {
-			logAndThrowError("Invalid input: Numbers cannot be null");
+			logAndThrowError("Numbers cannot be null.");
 		}
 		if (num2.doubleValue() == 0.0) {
-			logAndThrowError("Invalid input: Divisor cannot be 0");
+			logAndThrowError("Divisor cannot be 0.");
 		}
 	}
 
 	// Validates a list of operation requests
 	public void validateOperationsList(List<OperationRequest> operations) {
 		if (operations == null || operations.isEmpty()) {
-			logAndThrowError("Operation list cannot be null or empty");
+			logAndThrowError("Operation list cannot be empty.");
 		}
+		operations.forEach(this::validateOperationRequest);
+	}
 
-		for (OperationRequest operationRequest : operations) {
-			MathOperation mathOperation = validateAndParseOperation(operationRequest.getOp());
-			validateOperation(mathOperation);
-			validateNumber(operationRequest.getNum());
-		}
+	// Validates an individual operation request
+	private void validateOperationRequest(OperationRequest operationRequest) {
+		validateOperation(operationRequest.getOp());
+		validateNumber(operationRequest.getNum());
 	}
 
 	// Ensures a single number is not null
 	private void validateNumber(Number num) {
 		if (num == null) {
-			logAndThrowError("Invalid operation request: Number cannot be null");
+			logAndThrowError("Number cannot be null.");
 		}
 	}
 
-	// Converts string to MathOperation, throws error if invalid
-	public MathOperation validateAndParseOperation(String operationStr) {
+	// Parses the string to MathOperation, logs error if invalid
+	private MathOperation parseOperation(String operationStr) {
 		try {
 			return MathOperation.valueOf(operationStr.toUpperCase());
 		} catch (IllegalArgumentException e) {
-			logAndThrowError(operationStr + ". Supported operations are: ADD, SUBTRACT, MULTIPLY, DIVIDE.");
-			return null;  // This return is technically unreachable but added for completeness
+			log.error("Invalid operation: " + operationStr, e);
+			return null;
 		}
 	}
 
