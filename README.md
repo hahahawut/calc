@@ -12,14 +12,38 @@ This project implements a flexible, extensible calculator in Java. It supports b
 ## Project Structure
 ```
 src/
-├── main/java/org/example/
-│   ├── Calculator.java
-│   ├── Operation.java
-│   └── OperationStrategy.java
-└── test/java/org/example/
-    └── CalculatorTest.java
-pom.xml
-README.md
+├── main/java/org/example/assignment/
+│   ├── controller/                # Handles incoming requests and responses
+│   │   └── Controller.java
+│   ├── domain/calculator/          # Business logic for calculation
+│   │   ├── strategy/               # Strategy pattern for handling different operations
+│   │   │   ├── Calculator.java     # Main Calculator class
+│   │   │   └── ChainedCalculator.java # Handles chaining of multiple operations
+│   ├── exception/                  # Handles errors and exceptions
+│   │   ├── ComputationException.java
+│   │   ├── ExceptionHandler.java
+│   │   └── InvalidParameterException.java
+│   ├── model/                      # Models representing data transfer objects (DTOs)
+│   │   ├── CalculateRequest.java
+│   │   ├── ChainRequest.java
+│   │   ├── MathOperation.java      # Enum representing available math operations
+│   │   ├── OperationRequest.java
+│   │   └── Response.java
+│   ├── service/                    # Services implementing business logic
+│   │   ├── CalculationService.java
+│   │   └── InputValidationService.java
+│   └── Application.java            # Entry point for the application
+│
+├── resources/                      # Configuration files
+│   ├── application.properties      # Spring Boot configuration
+│   ├── JSONEventLayoutV1.json      # JSON layout for logging
+│   └── log4j2.xml                  # Log4j2 configuration for logging
+│
+├── test/java/org/example/assignment/domain/calculator/strategy/
+│   ├── BigDecimalMathOperationTest.java  # Test for BigDecimal operations
+│   ├── DoubleMathOperationTest.java      # Test for double operations
+│   └── IntegerMathOperationTest.java     # Test for integer operations
+
 ```
 
 ## Setup
@@ -103,3 +127,34 @@ mvn test
 
 These design decisions aim to create a flexible, maintainable, and extensible calculator that can be easily adapted to various use cases and expanded with new functionality as needed.
 
+
+## Sample API Usage
+
+1. Basic Addition
+
+```
+curl --location 'localhost:9000/v1/calc' \
+--header 'Content-Type: application/json' \
+--data '{
+    "op": "ADD",
+    "num1": 1,
+    "num2": 2
+}'
+
+```
+2. Chain Operations
+
+```
+curl --location 'localhost:9000/v1/calc' \
+--header 'Content-Type: application/json' \
+--data '{
+    "operations": [
+        {"op": "ADD", "num": 5},
+        {"op": "SUBTRACT", "num": 2},
+        {"op": "MULTIPLY", "num": 3},
+        {"op": "DIVIDE", "num": 4}
+    ]
+}'
+
+
+```
