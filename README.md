@@ -54,7 +54,7 @@ src/
    ```
 3. Navigate to the project directory:
    ```
-   cd Calc
+   cd calc
    ```
 4. Build the project:
    ```
